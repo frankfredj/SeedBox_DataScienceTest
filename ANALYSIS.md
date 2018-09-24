@@ -15,7 +15,7 @@ I have my own bias in regards to assuming normaly distributed µ's, because I do
 * Build a function that simulates {PC1, PC2, PC3} in accordance to their respective pdf's
 * Simulate {PC1, PC2, PC3}, and recover {Revenue, ReBill, ChargeBack + ReFund} with the inverse of Ω
 
-This circumvent the issues that arise from covariances while preserving the fundamental structure of the sample's {µ, Σ}. (In my code file, I give an example of 100 000 random values being simulated from the {test | transaction} sample. The resuting mean vector and variance-covariance matrix is virtualy identical to the sample's mean vector and variance-covariance matrix.)
+This circumvent the issues that arise from sampling given non-zero covariances while preserving the fundamental structure of the sample's {µ, Σ}. (In my code file, I give an example of 100 000 random values being simulated from the {test | transaction} sample. The resuting mean vector and variance-covariance matrix is virtualy identical to the sample's mean vector and variance-covariance matrix.)
 
 Hence, for example, a random variable taken from the {Test} distribution would be (0,0,0) with probability 0.8897877, and equal to Ω^(1) (PC1, PC2, PC3)^T derived in accordance to the test sample's {µ, Σ} with probability 0.11021234. (0.11021234 is the proportion of the test group that went on to complete transactions after being labelled.)
 
