@@ -13,7 +13,7 @@ And the ReBill, ChargeBack, Refund look like:
 
 ![](https://i.imgur.com/uQq6h3j.png)
 
-To showcase the differences in Revenue, ReBill, ChargeBack and Refund, we can refer the the Principal Component plot:
+To showcase the differences in Revenue, ReBill, ChargeBack and Refund amongst the two groups, we can refer the the Principal Component plot:
 
 ![](https://i.imgur.com/1DnZOoO.png)
 
