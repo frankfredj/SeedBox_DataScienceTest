@@ -17,7 +17,7 @@ To showcase the differences in Revenue, ReBill, ChargeBack and Refund amongst th
 
 ![](https://i.imgur.com/1DnZOoO.png)
 
-From a quick glimpse at the graphs above, variables are not normaly distributed, and both groups are not easily separable. The amount of clients that have made transaction(s) isn't that big, too: only 1079 for the control group, and 1635 for the test one. Common assumtions in regards to transactions is that they are Poisson distributed. This would give rise to a compound Poisson distribution for revenues, and our sample size is too small to give relevant credibility to any estimator {µ, σ} derived under a normality assumption. (A common credibility standard is n/λ = 1082.41 (1 + σ^2 / µ^2) for Compound Poisson processes.)
+From a quick glimpse at the graphs above, variables are not normaly distributed, and both groups are not easily separable. The amount of clients that have made transaction(s) isn't that big, too: only 1079 for the control group, and 1635 for the test one. Common assumtions in regards to transactions is that they are Poisson distributed. This would give rise to a compound Poisson distribution for revenues, and our sample size with regards to transactions is too small to give relevant credibility to any estimator {µ, σ} derived under a normality assumption. (A common credibility standard is n/λ = 1082.41 (1 + σ^2 / µ^2) for Compound Poisson processes.)
 
 I have my own bias in regards to assuming normaly distributed µ's, because I do not know how big "n" needs to be. This is why I suggest using a variant of Monte Carlo simulations rather than classic t-tests on means. In order to do so, I propose the following method:
 
@@ -33,7 +33,16 @@ This circumvents the issues that arise from sampling given non-zero covariances 
 
 Hence, for example, a random variable taken from the {Test} distribution would be (0,0,0) with probability 0.8897877, and equal to Ω^(-1) (PC1, PC2, PC3)^T derived in accordance to the test sample's {µ, Σ} with probability 0.11021234. (0.11021234 is the proportion of the test group that went on to complete transactions after being labelled.)
 
-All of this might seem a bit too fancy / complex, but it has it's advantages: it will give rise to a method that is much more intuitive than abstract t-tests slapped with normality assumptions. 
+So, for any question that is binomial in nature (i.e.: are test subjects likely to produce at least one more ReBill), we could derive the following comprehensible test:
+
+1. Simulate differences between 2 random variables drawn from the {Control} sample. 
+2. Simulate differences between 2 random variables drawn from the {Test} and {Control} sample.
+3. Compute the respective likelyhoods, that is, the proportion of differences that are greater than a certain treshold. (For the ReBill case, this treshold would be 1.)
+4. Check if the {Test - Control} proportion is an outlier with regards to the {Control - Control} distribution
+
+Assuming normality of the {Control - Control} is reasonable since it is a Binomial variable with parameters (n,p), which converges rapidly to a normal distribution.
+
+We do, however, need to draw a variable from the samples where a transaction has occured in order to obtain a non-zero difference. So our Normal distribution with regards to {Control} will have estimated mean p, and variance p(1-p)/1079.
 
 
 
@@ -46,10 +55,6 @@ We'll simmulate 2 vectors of random variables, namely:
 
 We will then compute respective p's, where "p" is the proportion of R >= 1.
 
-Since p's are techically derived from a sum of Bernouli random variables, their summation exhibit a Binomial distribution with parameters (p, n). Such a distribution converges rapidly towards a Normal distribution N(p, p(1-p)/n). We've effectively cleared out the problem of having a sufficiently large "n" (where the underlying distribution of the random variable is unknown) in order to apply a normality assumption, namely for t-tests.
-
-The idea behind all of this is to simply check what are the average odds of observing a difference of more than 1 REBILL between two people who can opt-out online. If implementing a different opt-out system really does affect the odds described above, then our newly estimated "p" (with {test} - {control}) will be an outlier.
-
 Using the simulation tools described in the previous section with n = 100 000, we have gathered the following statistics:
 
 * p given {test, control} was equal to 0.07309 
@@ -57,7 +62,7 @@ Using the simulation tools described in the previous section with n = 100 000, w
 
 Our hypothesis is that: p given {test, control} - p given {control, control} = 0
 
-We can now perform a z-test on our p's. First, we need to consider our sample sizes: {1079, 1635} for {control | transaction}, {test | transaction}. The sample consisting of consumers who didn't do any transaction is uniform with value and sd 0 for all variables. Thus, generating a non-zero difference in revenue is conditional on sampling a variable from either {control | transaction} and/or {test | transaction}. That's why we will use a z-test with variance =  0.01920(1-0.01920)/1079 and mean = 0.01920 to check how likely it would be to observe p = 0.07309. (That is, using the "n" of the non-zero difference control group.)
+We can now perform a z-test with variance =  0.01920(1-0.01920)/1079 and mean = 0.01920 to check how likely it would be to observe p = 0.07309. 
 
 The above test results in a p-value of 1, indicating that users amongst the test groups are likely to generate at least one more ReBill than their control counterparts.
 
