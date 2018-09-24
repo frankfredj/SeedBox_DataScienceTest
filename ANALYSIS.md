@@ -54,3 +54,44 @@ The resulting p-value is 1, which indicates that someone amongst the test group 
 
 
 
+# Is a user that must call-in to cancel more likely to generate more revenues?
+
+Working in the exact same manner as earlier, we just swap the REBILL variable for the total REVENUE one. 
+
+Also, instead of calculating the proportion of differences greater than or equal to 1, we'll simply calculate the proportion of difference greater than 0.
+
+Using n = 100 000 again, we have gathered the following statistics:
+
+* p given {test, control} was equal to 0.10545 and had variance 9.43303e-07 given n
+* p given {control, control} was equal to 0.02414 and had variance 2.355726e-07 given n
+
+The resulting p-value is 1, which indicates that someone amongst the test group is indeed likely to generate more revenue. (far-right outlier)
+
+
+
+#Is a user that must call-in more likely to produce a higher chargeback rate(CHARGEBACKs/REBILLs)?
+
+For this metric, we'll use {Revenue, Chargeback / ReBill, Refund} as our base variables. Also, we will use the following rules:
+
+* Chargeback / ReBill = 1 if ReBill = 0, but Chargeback > 0
+* Chargeback / ReBill = 0 if ReBill = 0 and Chargeback = 0
+
+Working in same Binomial settings with n = 100 000, we have gathered the following statistics:
+
+* p given {test, control} was equal to 0.10545 and had variance 9.43303e-07 given n
+* p given {control, control} was equal to 0.02414 and had variance 2.355726e-07 given n
+
+The resulting p-value is 0, which indicates that someone amongst the test group not likely to have a higher chargeback rate. (far-left outlier)
+
+
+
+# Conclusion
+
+Based on Monte Carlo simulations of Bernouli Random Variables respecting the fundamental structure {µ, Σ} of our sample, we can safely declare that forcing people to opt-out via a phone-in system is likely to:
+
+* Generate more ReBill
+* Increase revenues
+* Decrease ChargeBack rates
+
+
+
