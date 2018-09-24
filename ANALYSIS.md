@@ -77,10 +77,10 @@ For this metric, we'll use {Revenue, Chargeback / ReBill, Refund} as our base va
 
 Working in same Binomial settings with n = 100 000, we have gathered the following statistics:
 
-* p given {test, control} was equal to 0.89738
-* p given {control, control} was equal to 0.97558 
+* p given {test, control} was equal to 0.02848
+* p given {control, control} was equal to 0.02393 
 
-The resulting p-value is 5.158543e-19, which indicates that someone amongst the test group is not likely to have a higher chargeback rate. (far-left outlier)
+The resulting p-value is 0.7681086, which is inconclusive. We could accept it at a 0.4637828 (two-sided) level of significance, but that is just absurd in my oppinion. Perhaps the outcome would have been different if we just checked the Chargeback rather than Chargeback / ReBill. But under these settings, we reject the hypothesis that a use who must call-in is more likely to produce a higher chargeback rate.
 
 
 
@@ -90,7 +90,7 @@ Based on Monte Carlo simulations of Bernouli Random Variables respecting the fun
 
 * Generate more ReBill
 * Increase revenues
-* Decrease ChargeBack rates
+* Not affect chargeback rates
 
 
 
