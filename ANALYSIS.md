@@ -7,7 +7,7 @@ Both variables exhibit the same probabilistic structure, namely:
 
 From a quick glimpse at the numerical pdf ([Link to plots](https://imgur.com/a/U3A0qvF)), variables are not normaly distributed at all. The amount of clients that have made transaction(s) isn't that big, too: only 1079 for the control group, and 1635 for the test one. Common assumtions in regards to transactions is that they are Poisson distributed. This would give rise to a compound Poisson distribution for revenues, and our sample size is too small to give relevant credibility to any estimator {µ, σ} derived under a normality assumption. (A common credibility standard is n/λ = 1082.41 (1 + σ^2 / µ^2) for Compound Poisson processes.)
 
-I have my own bias in regards to assuming normaly distributed µ's, because I do not know how big "n" needs to be. This is why I suggest using a variant of Monte Carlo simulations instead. In order to do so, I propose the following method:
+I have my own bias in regards to assuming normaly distributed µ's, because I do not know how big "n" needs to be. This is why I suggest using a variant of Monte Carlo simulations rather than classic t-tests on means. In order to do so, I propose the following method:
 
 
 * Diagonalize Σ with the transformation matrix Ω, thus finding independent linear combinations of {Revenue, ReBill, ChargeBack + ReFund}. (I've added the negative transactions together because of their sparsity). 
@@ -15,16 +15,11 @@ I have my own bias in regards to assuming normaly distributed µ's, because I do
 * Build a function that simulates {PC1, PC2, PC3} in accordance to their respective pdf's
 * Simulate {PC1, PC2, PC3}, and recover {Revenue, ReBill, ChargeBack + ReFund} with the inverse of Ω
 
-This circumvent the issues that arise from covariances while preserving the fundamental structure of the sample's {µ, Σ}
+This circumvent the issues that arise from covariances while preserving the fundamental structure of the sample's {µ, Σ}. (In my code file, I give an example of 100 000 random values being simulated from the {test | transaction} sample. The resuting mean vector and variance-covariance matrix is virtualy identical to the sample's mean vector and variance-covariance matrix.)
 
 Hence, for example, a random variable taken from the {Test} distribution would be (0,0,0) with probability 0.8897877, and equal to Ω^(1) (PC1, PC2, PC3)^T derived in accordance to the test sample's {µ, Σ} with probability 0.11021234. (0.11021234 is the proportion of the test group that went on to complete transactions after being labelled.)
 
-(Note that this extend the possible values of {Revenue, ReBill, ChargeBack + ReFund} from {R, N, N} to {R, R, R}. This, however, isn't a problem if we use our simulation function to calculate likelihoods.)
-
-All of this might seem a bit too fancy / complex, but it has it's advantages: it will give rise to a method that is much more intuitive than abstract t-tests slapped with normality assumptions.
-
-Note: The code file also includes a PCA graph and a logistic regression on transactions. This was done in order to highlight the failure to distinguish between a {Test} and a {Control} variable based on predictive modeling with respect to transactions. All in all, trying to model some function f(transaction) with output (Test, Control) wouldn't be wise.
-
+All of this might seem a bit too fancy / complex, but it has it's advantages: it will give rise to a method that is much more intuitive than abstract t-tests slapped with normality assumptions. 
 
 
 
@@ -37,20 +32,24 @@ We'll simmulate 2 vectors of random variables, namely:
 
 We will then compute respective p's, where "p" is the proportion of R >= 1.
 
-Since p's are techically derived from a sum of Bernouli random variables, their summation exhibit a Binomial distribution with parameters (p, n). Such a distribution converges rapidly towards a Normal distribution N(p, p(1-p)/n). We've effectively cleared out the problem of having a sufficiently large "n" where the underlying distribution of the random variable is unknown in order to apply a normality assumption, namely for t-tests.
+Since p's are techically derived from a sum of Bernouli random variables, their summation exhibit a Binomial distribution with parameters (p, n). Such a distribution converges rapidly towards a Normal distribution N(p, p(1-p)/n). We've effectively cleared out the problem of having a sufficiently large "n" (where the underlying distribution of the random variable is unknown) in order to apply a normality assumption, namely for t-tests.
 
-The idea behind all of this is to simply check what are the average odds of observing a difference of more than 1 REBILL between two people who can opt-out online. If implementing a different opt-out system really does affect the odds described above, then our newly estimated "p" will be an outlier.
+The idea behind all of this is to simply check what are the average odds of observing a difference of more than 1 REBILL between two people who can opt-out online. If implementing a different opt-out system really does affect the odds described above, then our newly estimated "p" (with {test} - {control}) will be an outlier.
 
 Using the simulation tools described in the previous section with n = 100 000, we have gathered the following statistics:
 
-* p given {test, control} was equal to 0.07309 and had variance 6.774785e-07 given n
-* p given {control, control} was equal to 0.01920 and had variance 1.883136e-07 given n
+* p given {test, control} was equal to 0.07309 
+* p given {control, control} was equal to 0.01920 
 
 Our hypothesis is that: p given {test, control} - p given {control, control} = 0
 
-We can safely label the distribution of this random variable as normal with mean 0 and s.d. 6.774785e-07+1.883136e-07 under our hypothesis.
+We can now perform a t-test on our p's. First, we need to consider our sample sizes: {1079, 1635} for {control | transaction}, {test | transaction}. The sample consisting of consumers who didn't do any transaction is uniform with value 0 for all variables. Thus, generating a non-zero difference in revenue is conditional on sampling a variable from either {control | transaction} and/or {test | transaction}. That's why we will use a t-test with respective "n's" {1635, 1079}. 
 
-The resulting p-value is 1, which indicates that someone amongst the test group is indeed likely to generate at least 1 more rebill. (far-right outlier)
+Our hypothesis is: p given {test, control} - p given {control, control} = 0
+
+And the variance of such a quantity is given by: 0.07309(1-0.07309)/1635 + 0.01920(1-0.01920)/1079
+
+Which results in a p-value of 1, indicating that users amongst the test groups are likely to generate at least one more ReBill than their control counterparts.
 
 
 
@@ -62,8 +61,8 @@ Also, instead of calculating the proportion of differences greater than or equal
 
 Using n = 100 000 again, we have gathered the following statistics:
 
-* p given {test, control} was equal to 0.10545 and had variance 9.43303e-07 given n
-* p given {control, control} was equal to 0.02414 and had variance 2.355726e-07 given n
+* p given {test, control} was equal to 0.10545 
+* p given {control, control} was equal to 0.02414 
 
 The resulting p-value is 1, which indicates that someone amongst the test group is indeed likely to generate more revenue. (far-right outlier)
 
@@ -78,10 +77,10 @@ For this metric, we'll use {Revenue, Chargeback / ReBill, Refund} as our base va
 
 Working in same Binomial settings with n = 100 000, we have gathered the following statistics:
 
-* p given {test, control} was equal to 0.10545 and had variance 9.43303e-07 given n
-* p given {control, control} was equal to 0.02414 and had variance 2.355726e-07 given n
+* p given {test, control} was equal to 0.89738
+* p given {control, control} was equal to 0.97558 
 
-The resulting p-value is 0, which indicates that someone amongst the test group not likely to have a higher chargeback rate. (far-left outlier)
+The resulting p-value is 5.158543e-19, which indicates that someone amongst the test group is not likely to have a higher chargeback rate. (far-left outlier)
 
 
 
