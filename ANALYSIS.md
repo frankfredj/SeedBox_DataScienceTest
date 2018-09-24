@@ -57,7 +57,7 @@ Which results in a p-value of 1, indicating that users amongst the test groups a
 
 Working in the exact same manner as earlier, we just swap the REBILL variable for the total REVENUE one. 
 
-Also, instead of calculating the proportion of differences greater than or equal to 1, we'll simply calculate the proportion of difference greater than 0.
+Also, instead of calculating the proportion of differences greater than or equal to 1, we'll simply calculate the proportion of differences greater than 0.
 
 Using n = 100 000 again, we have gathered the following statistics:
 
