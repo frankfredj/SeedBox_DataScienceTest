@@ -215,8 +215,6 @@ autoplot(prcomp(scale(total.frame)), data = identifier, colour = 'Group')
 
 total.matrix <- total.frame[,c(2,6,9)]
 
-autoplot(prcomp(total.matrix), data = identifier, colour = 'Group')
-
 total.Tmat <- as.matrix(eigen(var(total.matrix))$vectors)
 
 total.PC <- total.matrix %*% total.Tmat
@@ -287,7 +285,7 @@ control.PC.freq <- Extract_Frequencies(control.PC)
 
 #This function takes an output from the Extract_Frequencies function, and spits out a variable in accordance to the empirical cdf (based off the frequencies)
 
-Simulate_from_frequency <- function(freq,k,p){
+Simulate_from_frequency <- function(freq,k){
 
 y <- freq
 x <- as.numeric(rownames(y))
@@ -349,14 +347,19 @@ stopCluster(cl)
 Simulated.Data <- (as.matrix(cbind(col.1, col.2, col.3)) %*% test.InvMat)
 colnames(Simulated.Data) <- colnames(test.matrix)
 
+print("Simulation:", quote = FALSE)
 print(cor(Simulated.Data))
+
+print("Sample:", quote = FALSE)
 print(cor(test.matrix))
 
+
+
 print("Respective means:")
-for(i in 1:ncol(Simulated.Data)){print(c(mean(Simulated.Data[,i]),mean(test.matrix[,i])))}
+for(i in 1:ncol(Simulated.Data)){print(paste("Simulation:", mean(Simulated.Data[,i]) ,"Sample:", mean(test.matrix[,i])), quote = FALSE)}
 
 print("Respective sd's:")
-for(i in 1:ncol(Simulated.Data)){print(c(sd(Simulated.Data[,i]),sd(test.matrix[,i])))}
+for(i in 1:ncol(Simulated.Data)){print(paste("Simulation:", sd(Simulated.Data[,i]) ,"Sample:", sd(test.matrix[,i])), quote = FALSE)}
 
 #So we are effectively able to sample from any numerical multivariate distribution with mean vector, sd vector and vcov matrix {u, o, M} using the above tool
 #This will be usefull to run statistical simulations rather than drawing conclusion from a sample which size is relatively modest
@@ -437,8 +440,11 @@ print(GrtThenOneReBill.Ps)
 p.val.test <- matrix(nrow = 1, ncol = 1)
 colnames(p.val.test) <- c("Binomial p-value")
 
+n1 <- length(Transaction_test)
+n2 <- length(Transaction_control)
+
 x <- GrtThenOneReBill.Ps[1] - GrtThenOneReBill.Ps[2]
-sigma <- GrtThenOneReBill.Ps[1]*(1-GrtThenOneReBill.Ps[1])/length(ReBill.Differences.control) + GrtThenOneReBill.Ps[2]*(1-GrtThenOneReBill.Ps[2])/length(ReBill.Differences.control)
+sigma <- GrtThenOneReBill.Ps[2]*(1-GrtThenOneReBill.Ps[2])/n2
 
 p.val.test[1] <- pnorm(x / sqrt(sigma))
 
@@ -477,7 +483,7 @@ MoreRev.p.val.test <- matrix(nrow = 1, ncol = 1)
 colnames(MoreRev.p.val.test) <- c("Binomial p-value")
 
 x <- MoreRev.Ps[1] - MoreRev.Ps[2]
-sigma <- MoreRev.Ps[1]*(1-MoreRev.Ps[1])/length(ReBill.Differences.control) + MoreRev.Ps[2]*(1-MoreRev.Ps[2])/length(ReBill.Differences.control)
+sigma <-  MoreRev.Ps[2]*(1-MoreRev.Ps[2])/n2
 
 MoreRev.p.val.test[1] <- pnorm(x / sqrt(sigma))
 
@@ -539,8 +545,8 @@ stopCluster(cl)
 MoreCBr.Ps <- matrix(nrow = 2, ncol = 1)
 colnames(MoreCBr.Ps) <- "p"
 rownames(MoreCBr.Ps) <- c("test vs control", "test vs test")
-MoreCBr.Ps[1] <- length(which(ChargeBackRates.Differences >= 0)) / length(ChargeBackRates.Differences)
-MoreCBr.Ps[2] <- length(which(ChargeBackRates.Differences.control  >= 0)) / length(ChargeBackRates.Differences.control)
+MoreCBr.Ps[1] <- length(which(ChargeBackRates.Differences > 0)) / length(ChargeBackRates.Differences)
+MoreCBr.Ps[2] <- length(which(ChargeBackRates.Differences.control  > 0)) / length(ChargeBackRates.Differences.control)
 
 
 print(MoreCBr.Ps)
@@ -549,15 +555,9 @@ MoreCBr.p.val.test <- matrix(nrow = 1, ncol = 1)
 colnames(MoreCBr.p.val.test) <- c("Binomial p-value")
 
 x <- MoreCBr.Ps[1] - MoreCBr.Ps[2]
-sigma <- MoreCBr.Ps[1]*(1-MoreCBr.Ps[1])/length(ReBill.Differences.control) + MoreCBr.Ps[2]*(1-MoreCBr.Ps[2])/length(ReBill.Differences.control)
+sigma <- MoreCBr.Ps[2]*(1-MoreCBr.Ps[2])/n2
 
 MoreCBr.p.val.test[1] <- pnorm(x / sqrt(sigma))
 
 print(MoreCBr.p.val.test)
-
-
-
-
-
-
 
