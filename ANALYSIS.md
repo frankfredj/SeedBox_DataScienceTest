@@ -35,3 +35,22 @@ We'll simmulate 2 vectors of random variables, namely:
 1. A difference between {REBILL | test} and {REBILL | control} labelled R(test, control)
 2. A difference between {REBILL | control} and {REBILL | control} labelled R(control, control)
 
+We will then compute respective p's, where "p" is the proportion of R >= 1.
+
+Since p's are techically derived from a sum of Bernouli random variables, their summation exhibit a Binomial distribution with parameters (p, n). Such a distribution converges rapidly towards a Normal distribution N(p, p(1-p)/n). We've effectively cleared out the problem of having a sufficiently large "n" where the underlying distribution of the random variable is unknown in order to apply a normality assumption, namely for t-tests.
+
+The idea behind all of this is to simply check what are the average odds of observing a difference of more than 1 REBILL between two people who can opt-out online. If implementing a different opt-out system really does affect the odds described above, then our newly estimated "p" will be an outlier.
+
+Using the simulation tools described in the previous section with n = 100 000, we have gathered the following statistics:
+
+* p given {test, control} was equal to 0.07309 and had variance 6.774785e-07 given n
+* p given {control, control} was equal to 0.01920 and had variance 1.883136e-07 given n
+
+Our hypothesis is that: p given {test, control} - p given {control, control} = 0
+
+We can safely label the distribution of this random variable as normal with mean 0 and s.d. 6.774785e-07+1.883136e-07 under our hypothesis.
+
+The resulting p-value is 1, which indicates that someone amongst the test group is indeed likely to generate at least 1 more rebill. (far-right outlier)
+
+
+
