@@ -57,13 +57,9 @@ Using the simulation tools described in the previous section with n = 100 000, w
 
 Our hypothesis is that: p given {test, control} - p given {control, control} = 0
 
-We can now perform a t-test on our p's. First, we need to consider our sample sizes: {1079, 1635} for {control | transaction}, {test | transaction}. The sample consisting of consumers who didn't do any transaction is uniform with value 0 for all variables. Thus, generating a non-zero difference in revenue is conditional on sampling a variable from either {control | transaction} and/or {test | transaction}. That's why we will use a t-test with respective "n's" {1635, 1079}. 
+We can now perform a z-test on our p's. First, we need to consider our sample sizes: {1079, 1635} for {control | transaction}, {test | transaction}. The sample consisting of consumers who didn't do any transaction is uniform with value and sd 0 for all variables. Thus, generating a non-zero difference in revenue is conditional on sampling a variable from either {control | transaction} and/or {test | transaction}. That's why we will use a z-test with variance =  0.01920(1-0.01920)/1079 and mean = 0.01920 to check how likely it would be to observe p = 0.07309. (That is, using the "n" of the non-zero difference control group.)
 
-Our hypothesis is: p given {test, control} - p given {control, control} = 0
-
-And the variance of such a quantity is given by: 0.07309(1-0.07309)/1635 + 0.01920(1-0.01920)/1079
-
-Which results in a p-value of 1, indicating that users amongst the test groups are likely to generate at least one more ReBill than their control counterparts.
+The above test results in a p-value of 1, indicating that users amongst the test groups are likely to generate at least one more ReBill than their control counterparts.
 
 
 
@@ -91,10 +87,10 @@ For this metric, we'll use {Revenue, Chargeback / ReBill, Refund} as our base va
 
 Working in same Binomial settings with n = 100 000, we have gathered the following statistics:
 
-* p given {test, control} was equal to 0.02848
-* p given {control, control} was equal to 0.02393 
+* p given {test, control} was equal to 0.02632
+* p given {control, control} was equal to 0.02429 
 
-The resulting p-value is 0.7681086, which is inconclusive. We could accept it at a 0.4637828 (two-sided) level of significance, but that is just absurd in my oppinion. Perhaps the outcome would have been different if we just checked the difference for Chargeback rather than Chargeback / ReBill. But under these settings, we reject the hypothesis that a use who must call-in is more likely to produce a higher chargeback rate.
+The resulting p-value is 0.667545, which is inconclusive. Perhaps the outcome would have been different if we just checked the difference for Chargeback rather than Chargeback / ReBill. But under these settings, we reject the hypothesis that a user who must call-in is more likely to produce a higher chargeback rate.
 
 
 
@@ -104,7 +100,6 @@ Based on Monte Carlo simulations of Bernouli Random Variables respecting the fun
 
 * Generate more ReBill
 * Increase revenues
-* Not affect chargeback rates
 
 
 
