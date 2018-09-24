@@ -64,7 +64,7 @@ Our hypothesis is that: p given {test, control} - p given {control, control} = 0
 
 We can now perform a z-test with variance =  0.01920(1-0.01920)/1079 and mean = 0.01920 to check how likely it would be to observe p = 0.07309. 
 
-The above test results in a p-value of 1, indicating that users amongst the test groups are likely to generate at least one more ReBill than their control counterparts.
+The above test results give a p-value of 1, indicating that users amongst the test groups are likely to generate at least one more ReBill than their control counterparts.
 
 
 
