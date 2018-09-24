@@ -69,7 +69,7 @@ The resulting p-value is 1, which indicates that someone amongst the test group 
 
 
 
-#Is a user that must call-in more likely to produce a higher chargeback rate(CHARGEBACKs/REBILLs)?
+# Is a user that must call-in more likely to produce a higher chargeback rate(CHARGEBACKs/REBILLs)?
 
 For this metric, we'll use {Revenue, Chargeback / ReBill, Refund} as our base variables. Also, we will use the following rules:
 
