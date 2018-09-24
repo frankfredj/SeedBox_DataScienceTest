@@ -9,8 +9,10 @@ Given that a user did perform a transactions, the numerical probability density 
 
 ![](https://i.imgur.com/IEMxlnt.png)
 
+And the ReBill, ChargeBack, Refund look like:
 
 ![]([https://i.imgur.com/43Ltm3J.png])
+
 
 From a quick glimpse at the numerical pdf's above, variables are not normaly distributed at all. The amount of clients that have made transaction(s) isn't that big, too: only 1079 for the control group, and 1635 for the test one. Common assumtions in regards to transactions is that they are Poisson distributed. This would give rise to a compound Poisson distribution for revenues, and our sample size is too small to give relevant credibility to any estimator {µ, σ} derived under a normality assumption. (A common credibility standard is n/λ = 1082.41 (1 + σ^2 / µ^2) for Compound Poisson processes.)
 
