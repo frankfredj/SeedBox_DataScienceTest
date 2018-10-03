@@ -64,7 +64,7 @@ Our hypothesis is that: p given {test, control} - p given {control, control} = 0
 
 We can now perform a z-test with variance =  0.01920(1-0.01920)/1079 and mean = 0.01920 to check how likely it would be to observe p = 0.07309. 
 
-The above test results give a p-value of 1, indicating that users amongst the test groups are likely to generate at least one more ReBill than their control counterparts.
+The above test results give a p-value of 1, indicating that users amongst the test groups are likely to generate at least one more ReBill than their control counterparts. (Note that 7% of the consumers are expected to generate one more ReBill. This is a small increase, but a statisticaly significant one nonetheless)
 
 
 
@@ -79,7 +79,7 @@ Using n = 100 000 again, we have gathered the following statistics:
 * p given {test, control} was equal to 0.10545 
 * p given {control, control} was equal to 0.02414 
 
-The resulting p-value is 1, which indicates that someone amongst the test group is indeed likely to generate more revenue. (far-right outlier)
+The resulting p-value is 1, which indicates that someone amongst the test group is indeed likely to generate more revenue (since it is a far-right outlier). 
 
 
 
@@ -103,8 +103,8 @@ The resulting p-value is 0.667545, which is inconclusive. Perhaps the outcome wo
 
 Based on Monte Carlo simulations of Bernouli Random Variables respecting the fundamental structure {µ, Σ} of our sample, we can safely declare that forcing people to opt-out via a phone-in system is likely to:
 
-* Generate more ReBill
-* Increase revenues
+* Generate more ReBill (Around 7% of the consumers will generate more ReBill)
+* Increase revenues (Around 10% of the consumers will generate more revenues)
 
 
 
