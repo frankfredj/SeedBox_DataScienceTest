@@ -5,7 +5,7 @@ Both variables exhibit the same probabilistic structure, namely:
 * They have a certain probability of making transaction(s) after visiting the cancelation page
 * Given they do perform transaction(s), they will spawn a vector {Revenue, ReBill, ChargeBack, ReFund} with mean vector µ, and variance-covariance matrix Σ. 
 
-Given that a user did perform a transactions, the numerical probability density functions look like this:
+Given that a user did perform a transactions, the numerical probability density functions look like this (linear interpolation was used to fit both distribution over the same domain, rather than using bar plots):
 
 ![](https://i.imgur.com/IEMxlnt.png)
 
